@@ -1,9 +1,8 @@
 import SwiftUI
 
-struct CreateAccountView: View {
+struct LogIn: View {
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var confirmPassword: String = ""
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
 
@@ -39,26 +38,12 @@ struct CreateAccountView: View {
                             .cornerRadius(8)
                             .shadow(radius: 5)
                     }
-                    
-                    // Confirm Password Input Field
-                    VStack(alignment: .leading) {
-                        Text("Confirm Password")
-                            .font(.headline)
-                            .foregroundColor(.purple)
-
-                        SecureField("Confirm your password", text: $confirmPassword)
-                            .textFieldStyle(PlainTextFieldStyle())
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(8)
-                            .shadow(radius: 5)
-                    }
 
                     // Submit Button
                     Button(action: {
-                        signUp()
+                        logIn()
                     }) {
-                        Text("Sign up")
+                        Text("Log in")
                             .font(.headline)
                             .padding()
                             .frame(maxWidth: .infinity)
@@ -74,7 +59,7 @@ struct CreateAccountView: View {
                 Spacer()
             }
             
-            Text("Create your account")
+            Text("Log In")
                 .font(.system(size: 20))
                 .foregroundColor(.purple)
                 .padding(.top, 40)
@@ -83,30 +68,30 @@ struct CreateAccountView: View {
         .padding()
         .background(Color(.systemGray6))
     }
-    
-    // Function to handle sign up
-    private func signUp() {
-        if email.isEmpty || password.isEmpty || confirmPassword.isEmpty {
+
+    // Function to handle login
+    private func logIn() {
+        if email.isEmpty || password.isEmpty {
             alertMessage = "Please fill in all fields."
             showAlert = true
             return
         }
-        
-        if password != confirmPassword {
-            alertMessage = "Passwords do not match."
-            showAlert = true
-            return
-        }
 
-        let newUser = UserManager.UserCredentials(email: email, password: password)
-        UserManager.saveUser(newUser)
-        alertMessage = "Account created successfully!"
+        if let savedUser = UserManager.getUser() {
+            if savedUser.email == email && savedUser.password == password {
+                alertMessage = "Logged in successfully!"
+            } else {
+                alertMessage = "Invalid email or password."
+            }
+        } else {
+            alertMessage = "No account found. Please sign up."
+        }
         showAlert = true
     }
 }
 
-struct SignUpView_Previews: PreviewProvider {
+struct LogInView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateAccountView()
+        LogIn()
     }
 }
