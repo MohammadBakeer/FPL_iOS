@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-struct Player {
-    var name: String
-    var shirtName: String
-    var price: Double
-}
 
 struct TableView: View {
     let players: [(String, String, String, String)]
@@ -79,24 +74,25 @@ struct Edit_Team_Page: View {
     
     
     @State private var FWD: [Player] = [
-        Player(name: "Player FWD 1", shirtName: "default-shirt", price: 0),
-        Player(name: "Player FWD 2", shirtName: "default-shirt", price: 0),
-        Player(name: "Player FWD 3", shirtName: "default-shirt", price: 0)
+        Player(name: "Player", shirtName: "default-shirt", price: 0),
+        Player(name: "Player", shirtName: "default-shirt", price: 0),
+        Player(name: "Player", shirtName: "default-shirt", price: 0)
     ]
     
     @State private var MID: [Player] = [
-        Player(name: "Player MID 1", shirtName: "default-shirt", price: 0),
-        Player(name: "Player MID 2", shirtName: "default-shirt", price: 0),
-        Player(name: "Player MID 3", shirtName: "default-shirt", price: 0)
+        Player(name: "Player", shirtName: "default-shirt", price: 0),
+        Player(name: "Player", shirtName: "default-shirt", price: 0),
+        Player(name: "Player", shirtName: "default-shirt", price: 0)
     ]
     
     @State private var DEF: [Player] = [
-        Player(name: "Player DEF 1", shirtName: "default-shirt", price: 0),
-        Player(name: "Player DEF 2", shirtName: "default-shirt", price: 0),
-        Player(name: "Player DEF 3", shirtName: "default-shirt", price: 0),
-        Player(name: "Player DEF 4", shirtName: "default-shirt", price: 0)
+        Player(name: "Player", shirtName: "default-shirt", price: 0),
+        Player(name: "Player", shirtName: "default-shirt", price: 0),
+        Player(name: "Player", shirtName: "default-shirt", price: 0),
+        Player(name: "Player", shirtName: "default-shirt", price: 0)
     ]
-    @State private var GK: Player = Player(name: "Player GK", shirtName: "default-shirt", price: 0)
+    @State private var GK: Player = Player(name: "Player", shirtName: "default-shirt", price: 0)
+    
     
     var body: some View {
         ScrollView {
@@ -219,27 +215,30 @@ struct Edit_Team_Page: View {
         case "FWD":
             if let index = FWD.firstIndex(where: { $0.name == player.0 }) {
                 FWD[index].shirtName = "default-shirt"
+                FWD[index].name = "Player" // Set the name back to "Player"
                 FWD[index].price = 0
             }
         case "MID":
             if let index = MID.firstIndex(where: { $0.name == player.0 }) {
                 MID[index].shirtName = "default-shirt"
+                MID[index].name = "Player" // Set the name back to "Player"
                 MID[index].price = 0
             }
         case "DEF":
             if let index = DEF.firstIndex(where: { $0.name == player.0 }) {
                 DEF[index].shirtName = "default-shirt"
+                DEF[index].name = "Player" // Set the name back to "Player"
                 DEF[index].price = 0
             }
         case "GK":
-            GK = Player(name: "Player GK", shirtName: "default-shirt", price: 0)
+            GK = Player(name: "Player", shirtName: "default-shirt", price: 0) // Set the GK name back to "Player"
         default:
             return
         }
         
         teamBudget += price
-            }
-                    
+    }
+
                 private func updatePlayerArray(_ players: inout [Player], with club: String, playerName: String, playerPrice: Double) {
                         if let index = players.firstIndex(where: { $0.shirtName == "default-shirt" }) {
                             players[index].name = playerName // Update the player's name
