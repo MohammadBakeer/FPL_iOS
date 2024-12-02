@@ -4,7 +4,9 @@ struct ManageProfileView: View {
     @State private var teamName: String = "Poethunder"
     @State private var phoneNumber: String = "Poethunder"
     @State private var mailingAddress: String = "7388 Sanderson Way"
-    
+    @State private var showLogIn: Bool = false // State variable to present LogIn view
+    @State private var showWelcomePage: Bool = false // State variable to present Welcome_Page
+
     var body: some View {
         VStack(spacing: 20) {
             // Header Section
@@ -44,7 +46,7 @@ struct ManageProfileView: View {
             // Buttons Section
             HStack(spacing: 20) {
                 Button(action: {
-                    // Action for Sign Out
+                    showLogIn = true // Show LogIn view when clicked
                 }) {
                     Text("Sign Out")
                         .font(.headline)
@@ -70,7 +72,7 @@ struct ManageProfileView: View {
             
             // Delete Account Button
             Button(action: {
-                // Action for Delete Account
+                showWelcomePage = true // Show Welcome_Page when clicked
             }) {
                 Text("Delete Account")
                     .font(.headline)
@@ -87,6 +89,12 @@ struct ManageProfileView: View {
         .padding()
         .background(Color(red: 0.9, green: 1.0, blue: 1.0))
         .ignoresSafeArea(edges: .bottom)
+        .fullScreenCover(isPresented: $showLogIn) {
+            LogIn() // Present the LogIn view
+        }
+        .fullScreenCover(isPresented: $showWelcomePage) {
+            Welcome_Page() // Present the Welcome_Page
+        }
     }
 }
 

@@ -11,7 +11,8 @@ import SwiftUI
 struct iOS_Ultamite_FPLApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Welcome_Page()
         }
     }
 }
+

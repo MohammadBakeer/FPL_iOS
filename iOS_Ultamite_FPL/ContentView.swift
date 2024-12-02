@@ -1,24 +1,32 @@
-//
-//  ContentView.swift
-//  iOS_Ultamite_FPL
-//
-//  Created by Mohammad Bakeer on 10/11/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            Home_Page()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Home")
+                }
+
+            FantasyPage()
+                .tabItem {
+                    Image(systemName: "star.fill")
+                    Text("Fantasy")
+                }
+
+            ManageProfileView()
+                .tabItem {
+                    Image(systemName: "person.fill")
+                    Text("Profile")
+                }
         }
-        .padding()
+        .accentColor(.purple) // Optional: Customize tab bar color
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
