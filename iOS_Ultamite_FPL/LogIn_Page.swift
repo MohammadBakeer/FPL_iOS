@@ -88,7 +88,7 @@ struct LogIn: View {
         }
 
         // Define the server URL
-        guard let url = URL(string: "http://localhost:3000/auth/login") else {
+        guard let url = URL(string: "https://fpliosserver-production.up.railway.app/auth/login") else {
             alertMessage = "Invalid server URL."
             showAlert = true
             return

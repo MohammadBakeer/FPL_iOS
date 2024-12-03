@@ -1,19 +1,21 @@
 import SwiftUI
 
 struct FantasyPage: View {
-    // State variables for managing leagues and popup visibility
     @State private var showCreateLeaguePopup: Bool = false
-    @State private var leagueName: String = "Hashir’s HQ"
-    @State private var pointsStartRound: String = "1"
+    @State private var showJoinLeaguePopup: Bool = false
+    @State private var leagueName: String = ""
+    @State private var pointsStartRound: String = ""
+    @State private var leagueCode: String = ""
     @State private var navigateToDetail: Bool = false
-    @State private var navigateToJoinPage: Bool = false
     @State private var leagues: [String] = ["Hashir’s HQ", "Poethunder HQ"] // Example leagues
     @State private var joinedLeague: String? = nil // Track the league the user joined
-    
+    @State private var globalPlayers: [Team] = teamsData // Global league data
+    @State private var currentPage: Int = 1
+    private let itemsPerPage = 5
+
     var body: some View {
         NavigationView {
             ZStack {
-                // Main content of the Fantasy Page
                 VStack {
                     Text("Fantasy Leagues")
                         .font(.largeTitle)
@@ -21,10 +23,92 @@ struct FantasyPage: View {
                         .padding(.top, 20)
                         .foregroundColor(.black)
                     
-                    // Buttons section
+                    // Global League Section
+                    VStack(spacing: 5) {
+                        Text("Global League")
+                            .font(.headline)
+                            .padding(.vertical, 5)
+                            .foregroundColor(.purple)
+                        
+                        // Table Header
+                        HStack {
+                            Text("Rank")
+                                .font(.subheadline)
+                                .frame(maxWidth: .infinity)
+                            Text("Team")
+                                .font(.subheadline)
+                                .frame(maxWidth: .infinity)
+                            Text("Squad")
+                                .font(.subheadline)
+                                .frame(maxWidth: .infinity)
+                            Text("Points")
+                                .font(.subheadline)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .foregroundColor(.white)
+                        .padding(8)
+                        .background(Color.purple)
+                        
+                        // Display rows based on current page
+                        ForEach(currentPageItems(), id: \.id) { player in
+                            HStack {
+                                Text("\(player.rank)")
+                                    .font(.footnote)
+                                    .frame(maxWidth: .infinity)
+                                Text(player.name)
+                                    .font(.footnote)
+                                    .frame(maxWidth: .infinity)
+                                Button("View") {
+                                    // Handle view squad action
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(5)
+                                .background(Color.purple)
+                                .foregroundColor(.white)
+                                .cornerRadius(5)
+                                .font(.footnote)
+                                Text("\(player.points)")
+                                    .font(.footnote)
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .padding(.vertical, 2)
+                        }
+                        
+                        // Pagination Controls
+                        HStack {
+                            Button(action: {
+                                if currentPage > 1 {
+                                    currentPage -= 1
+                                }
+                            }) {
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(currentPage > 1 ? .purple : .gray)
+                            }
+                            Text("\(currentPage) of \(totalPages())")
+                                .font(.subheadline)
+                                .padding(.horizontal, 8)
+                            Button(action: {
+                                if currentPage < totalPages() {
+                                    currentPage += 1
+                                }
+                            }) {
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(currentPage < totalPages() ? .purple : .gray)
+                            }
+                        }
+                        .padding(.top, 5)
+                    }
+                    .padding(10)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                    .padding(.horizontal)
+                    .padding(.bottom, 20)
+                    
+                    // Join and Create League Buttons
                     HStack(spacing: 20) {
                         Button(action: {
-                            showCreateLeaguePopup = true // Show the popup when Create League is clicked
+                            showCreateLeaguePopup = true
                         }) {
                             Text("Create League")
                                 .font(.headline)
@@ -37,7 +121,7 @@ struct FantasyPage: View {
                         
                         if joinedLeague == nil {
                             Button(action: {
-                                navigateToJoinPage = true // Navigate to JoinLeaguePage when clicked
+                                showJoinLeaguePopup = true
                             }) {
                                 Text("Join League")
                                     .font(.headline)
@@ -62,145 +146,163 @@ struct FantasyPage: View {
                     .padding(.horizontal)
                     .padding(.top, 10)
                     
-                    // Information section when no leagues are available
-                    if leagues.isEmpty {
-                        VStack(alignment: .center, spacing: 10) {
-                            Text("Create or Join your first private league")
-                                .font(.headline)
-                                .multilineTextAlignment(.center)
-                                .padding(.top, 30)
-                            Text("Private Leagues with 50000 people or more can contact us to earn prizes for their league")
-                                .font(.subheadline)
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal)
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
-                        .padding(.vertical, 20)
-                    } else {
-                        // Display all leagues if available
+                    // Private Leagues Section
+                    if !leagues.isEmpty {
                         VStack(alignment: .leading, spacing: 0) {
-                            Text("Current Leagues")
+                            Text("Private Leagues")
                                 .font(.headline)
                                 .padding(.vertical, 10)
                                 .padding(.horizontal)
                             
                             ForEach(leagues, id: \.self) { league in
-                                NavigationLink(destination: LeagueDetailPage(leagueName: league, leagues: $leagues)) {
-                                    HStack {
-                                        Image(systemName: "sportscourt")
-                                            .resizable()
-                                            .frame(width: 30, height: 30)
-                                            .padding(.trailing, 10)
-                                        
-                                        Text(league)
-                                            .font(.headline)
-                                        
-                                        Spacer()
-                                    }
-                                    .padding()
-                                    .background(Color.gray.opacity(0.1))
-                                    .cornerRadius(10)
-                                    .shadow(radius: 2)
-                                    .padding(.horizontal)
-                                    .padding(.vertical, 5)
+                                HStack {
+                                    Image(systemName: "sportscourt")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.trailing, 10)
+                                    
+                                    Text(league)
+                                        .font(.headline)
+                                    
+                                    Spacer()
                                 }
+                                .padding()
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(10)
+                                .shadow(radius: 2)
+                                .padding(.horizontal)
+                                .padding(.vertical, 5)
                             }
                         }
                         .padding(.top, 20)
                     }
                     
                     Spacer()
-                    
-                    // Navigation Link to LeagueDetailPage
-                    NavigationLink(destination: LeagueDetailPage(leagueName: leagueName, leagues: $leagues), isActive: $navigateToDetail) {
-                        EmptyView()
-                    }
-                    
-                    // Navigation Link to JoinLeaguePage
-                    NavigationLink(destination: JoinLeaguePage(leagues: $leagues, joinedLeague: $joinedLeague), isActive: $navigateToJoinPage) {
-                        EmptyView()
-                    }
+                }
+                .background(Color(red: 0.9, green: 1.0, blue: 1.0))
+                .ignoresSafeArea(edges: .bottom)
+                
+                // Popup for Creating a League
+                if showCreateLeaguePopup {
+                    popupView(
+                        title: "Create New League",
+                        content: {
+                            VStack(alignment: .leading, spacing: 15) {
+                                Text("League Name:")
+                                    .font(.headline)
+                                TextField("Enter league name", text: $leagueName)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .padding(.bottom, 10)
+                                
+                                Text("Points Start From Round:")
+                                    .font(.headline)
+                                TextField("Enter round number", text: $pointsStartRound)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .keyboardType(.numberPad)
+                            }
+                        },
+                        onConfirm: {
+                            if !leagueName.isEmpty {
+                                leagues.append(leagueName)
+                                leagueName = "" // Reset the input
+                                pointsStartRound = "" // Reset the input
+                                showCreateLeaguePopup = false
+                            }
+                        },
+                        onCancel: {
+                            showCreateLeaguePopup = false
+                        }
+                    )
                 }
                 
-                // Popup overlay for creating a league
-                if showCreateLeaguePopup {
-                    Color.black.opacity(0.4)
-                        .ignoresSafeArea()
-                        .onTapGesture {
-                            showCreateLeaguePopup = false // Dismiss popup when background is tapped
-                        }
-                    
-                    VStack(spacing: 20) {
-                        Text("Create New League")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .padding(.top, 10)
-                        
-                        // Popup content with input fields
-                        VStack(alignment: .leading, spacing: 15) {
-                            Text("League Name:")
-                                .font(.headline)
-                            TextField("Enter league name", text: $leagueName)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .padding(.bottom, 10)
-                            
-                            Text("Points Start From Round:")
-                                .font(.headline)
-                            TextField("Enter round number", text: $pointsStartRound)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .keyboardType(.numberPad)
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-                        
-                        // Buttons for confirming or canceling
-                        HStack {
-                            Button(action: {
-                                showCreateLeaguePopup = false
-                                leagues.append(leagueName) // Add the new league to the list
-                                navigateToDetail = true // Navigate to the LeagueDetailPage
-                            }) {
-                                Text("Confirm")
+                // Popup for Joining a League
+                if showJoinLeaguePopup {
+                    popupView(
+                        title: "Join League",
+                        content: {
+                            VStack(alignment: .leading, spacing: 15) {
+                                Text("League Code:")
                                     .font(.headline)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.green)
-                                    .cornerRadius(10)
+                                TextField("Enter league code", text: $leagueCode)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .padding(.bottom, 10)
                             }
-                            Button(action: {
-                                showCreateLeaguePopup = false
-                            }) {
-                                Text("Cancel")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.red)
-                                    .cornerRadius(10)
+                        },
+                        onConfirm: {
+                            if !leagueCode.isEmpty {
+                                joinedLeague = "League joined with code: \(leagueCode)"
+                                leagueCode = "" // Reset the input
+                                showJoinLeaguePopup = false
                             }
+                        },
+                        onCancel: {
+                            showJoinLeaguePopup = false
                         }
-                        .padding(.horizontal)
-                        .padding(.bottom, 10)
-                    }
-                    .padding()
-                    .background(Color.gray)
-                    .cornerRadius(10)
-                    .shadow(radius: 5)
-                    .frame(width: 350)
+                    )
                 }
             }
-            .background(Color(red: 0.9, green: 1.0, blue: 1.0))
-            .ignoresSafeArea(edges: .bottom)
         }
+    }
+    
+    private func popupView<Content: View>(
+        title: String,
+        @ViewBuilder content: @escaping () -> Content,
+        onConfirm: @escaping () -> Void,
+        onCancel: @escaping () -> Void
+    ) -> some View {
+        VStack(spacing: 20) {
+            Text(title)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.top, 10)
+            
+            content()
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+            
+            HStack {
+                Button(action: onConfirm) {
+                    Text("Confirm")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green)
+                        .cornerRadius(10)
+                }
+                Button(action: onCancel) {
+                    Text("Cancel")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red)
+                        .cornerRadius(10)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 10)
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 5)
+        .frame(width: 350)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private func currentPageItems() -> [Team] {
+        let startIndex = (currentPage - 1) * itemsPerPage
+        let endIndex = min(startIndex + itemsPerPage, globalPlayers.count)
+        return Array(globalPlayers[startIndex..<endIndex])
+    }
+    
+    private func totalPages() -> Int {
+        return (globalPlayers.count + itemsPerPage - 1) / itemsPerPage
     }
 }
 
-// Sample data
 struct Team: Identifiable {
     var id = UUID()
     var rank: Int
@@ -214,7 +316,9 @@ let teamsData = [
     Team(rank: 3, name: "Poethunder", points: 38440),
     Team(rank: 4, name: "theARABender", points: 34760),
     Team(rank: 5, name: "Minhaz", points: 30720),
-    Team(rank: 6, name: "Talha FC", points: 23880)
+    Team(rank: 6, name: "Talha FC", points: 23880),
+    Team(rank: 7, name: "Maryam Bakeer", points: 133680),
+    Team(rank: 8, name: "Mohammad JB", points: 107280)
 ]
 
 struct FantasyPage_Previews: PreviewProvider {

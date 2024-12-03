@@ -151,7 +151,7 @@ struct CreateAccountView: View {
             return
         }
 
-        let url = URL(string: "http://localhost:3000/auth/signup")!
+        let url = URL(string: "https://fpliosserver-production.up.railway.app/auth/signup")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

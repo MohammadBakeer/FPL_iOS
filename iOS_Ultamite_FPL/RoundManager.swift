@@ -17,7 +17,7 @@ class RoundManager {
     }
 
     func fetchRoundNum(completion: @escaping (Int?) -> Void) {
-        guard let url = URL(string: "http://localhost:3000/auth/fetchRound") else {
+        guard let url = URL(string: "https://fpliosserver-production.up.railway.app/auth/fetchRound") else {
             print("Invalid URL")
             completion(nil)
             return
