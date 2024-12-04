@@ -201,7 +201,7 @@ struct FantasyPage: View {
 }
 
 // Sample data
-struct Team: Identifiable {
+struct Members: Identifiable {
     var id = UUID()
     var rank: Int
     var name: String
@@ -209,12 +209,12 @@ struct Team: Identifiable {
 }
 
 let teamsData = [
-    Team(rank: 1, name: "fanwind", points: 49400),
-    Team(rank: 2, name: "LieutenantTeez", points: 49100),
-    Team(rank: 3, name: "Poethunder", points: 38440),
-    Team(rank: 4, name: "theARABender", points: 34760),
-    Team(rank: 5, name: "Minhaz", points: 30720),
-    Team(rank: 6, name: "Talha FC", points: 23880)
+    Members(rank: 1, name: "fanwind", points: 49400),
+    Members(rank: 2, name: "LieutenantTeez", points: 49100),
+    Members(rank: 3, name: "Poethunder", points: 38440),
+    Members(rank: 4, name: "theARABender", points: 34760),
+    Members(rank: 5, name: "Minhaz", points: 30720),
+    Members(rank: 6, name: "Talha FC", points: 23880)
 ]
 
 struct FantasyPage_Previews: PreviewProvider {

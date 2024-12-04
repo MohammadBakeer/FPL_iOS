@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
+
     var body: some View {
         TabView {
             Home_Page()
@@ -30,3 +31,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+

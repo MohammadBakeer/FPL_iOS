@@ -7,10 +7,10 @@ struct LeagueViewPage: View {
     @Environment(\.presentationMode) var presentationMode
     
     let teamsData = [
-        Team(rank: 1, name: "fanwind", points: 49400),
-        Team(rank: 2, name: "LieutenantTeez", points: 49100),
-        Team(rank: 3, name: "Poethunder", points: 38440),
-        Team(rank: 4, name: "theARABender", points: 34760)
+        Members(rank: 1, name: "fanwind", points: 49400),
+        Members(rank: 2, name: "LieutenantTeez", points: 49100),
+        Members(rank: 3, name: "Poethunder", points: 38440),
+        Members(rank: 4, name: "theARABender", points: 34760)
     ]
     
     var body: some View {

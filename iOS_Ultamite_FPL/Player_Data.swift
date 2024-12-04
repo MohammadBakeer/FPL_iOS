@@ -6,38 +6,33 @@
 //
 
 import SwiftUI
+import Foundation
 
 // Define a struct for Person
-struct Person {
+struct Person: Codable { // Conform to Codable (which includes Decodable)
     let name: String
     let shirtName: String
 }
 
+
 // Define players for each position
 let FWD: [Person] = [
-    Person(name: "Salah", shirtName: "Liverpool"),
-    Person(name: "Haaland", shirtName: "Man City"),
-    Person(name: "Saka", shirtName: "Arsenal")
+    Person(name: "Player", shirtName: "default-shirt"),
+    Person(name: "Player", shirtName: "default-shirt"),
+    Person(name: "Player", shirtName: "default-shirt")
 ]
 
 let MID: [Person] = [
-    Person(name: "De Bruyne", shirtName: "Man City"),
-    Person(name: "Thomas Partey", shirtName: "Arsenal"),
-    Person(name: "Fabinho", shirtName: "Liverpool")
+    Person(name: "Player", shirtName: "default-shirt"),
+    Person(name: "Player", shirtName: "default-shirt"),
+    Person(name: "Player", shirtName: "default-shirt")
 ]
 
 let DEF: [Person] = [
-    Person(name: "Van Dijk", shirtName: "Liverpool"),
-    Person(name: "Joao Cancelo", shirtName: "Man City"),
-    Person(name: "Ben White", shirtName: "Arsenal"),
-    Person(name: "Ruben Dias", shirtName: "Man City")
+    Person(name: "Player", shirtName: "default-shirt"),
+    Person(name: "Player", shirtName: "default-shirt"),
+    Person(name: "Player", shirtName: "default-shirt"),
+    Person(name: "Player", shirtName: "default-shirt")
 ]
 
-let GK: Person = Person(name: "Alisson Becker", shirtName: "Liverpool")
-//
-//  Player_Data.swift
-//  iOS_Ultamite_FPL
-//
-//  Created by Hashirul Quadir on 10/24/24.
-//
-
+let GK: Person = Person(name: "Player", shirtName: "default-shirt")

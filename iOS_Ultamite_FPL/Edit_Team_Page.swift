@@ -6,14 +6,8 @@
 //
 
 import SwiftUI
+import Foundation
 
-// Define the Player struct
-struct Player: Identifiable {
-    var id = UUID()
-    var name: String
-    var shirtName: String
-    var price: Double
-}
 
 // Define the PlayerView component
 struct PlayerView: View {
@@ -115,22 +109,25 @@ struct Edit_Team_Page: View {
     @State private var showRemovePopup = false
     @State private var selectedPlayer: (String, String, Double)?
     @State private var FWD: [Player] = [
-        Player(name: "Player", shirtName: "default-shirt", price: 0),
-        Player(name: "Player", shirtName: "default-shirt", price: 0),
-        Player(name: "Player", shirtName: "default-shirt", price: 0)
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "FWD"),
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "FWD"),
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "FWD")
     ]
+
     @State private var MID: [Player] = [
-        Player(name: "Player", shirtName: "default-shirt", price: 0),
-        Player(name: "Player", shirtName: "default-shirt", price: 0),
-        Player(name: "Player", shirtName: "default-shirt", price: 0)
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "MID"),
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "MID"),
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "MID")
     ]
+
     @State private var DEF: [Player] = [
-        Player(name: "Player", shirtName: "default-shirt", price: 0),
-        Player(name: "Player", shirtName: "default-shirt", price: 0),
-        Player(name: "Player", shirtName: "default-shirt", price: 0),
-        Player(name: "Player", shirtName: "default-shirt", price: 0)
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "DEF"),
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "DEF"),
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "DEF"),
+        Player(name: "Player", shirtName: "default-shirt", price: 0, position: "DEF")
     ]
-    @State private var GK: Player = Player(name: "Player", shirtName: "default-shirt", price: 0)
+
+    @State private var GK: Player = Player(name: "Player", shirtName: "default-shirt", price: 0, position: "GK")
 
     var body: some View {
         ScrollView {
@@ -246,30 +243,23 @@ struct Edit_Team_Page: View {
         let price = player.2
 
         switch position {
-        case "FWD":
-            if let index = FWD.firstIndex(where: { $0.name == player.0 }) {
-                FWD[index].name = "Player"
-                FWD[index].shirtName = "default-shirt"
-                FWD[index].price = 0
-            }
-        case "MID":
-            if let index = MID.firstIndex(where: { $0.name == player.0 }) {
-                MID[index].name = "Player"
-                MID[index].shirtName = "default-shirt"
-                MID[index].price = 0
-            }
-        case "DEF":
-            if let index = DEF.firstIndex(where: { $0.name == player.0 }) {
-                DEF[index].name = "Player"
-                DEF[index].shirtName = "default-shirt"
-                DEF[index].price = 0
-            }
-        case "GK":
-            GK = Player(name: "Player", shirtName: "default-shirt", price: 0)
-        default:
-            return
-        }
-
+           case "FWD":
+               if let index = FWD.firstIndex(where: { $0.name == player.0 }) {
+                   FWD[index] = Player(name: "Player", shirtName: "default-shirt", price: 0, position: "FWD")
+               }
+           case "MID":
+               if let index = MID.firstIndex(where: { $0.name == player.0 }) {
+                   MID[index] = Player(name: "Player", shirtName: "default-shirt", price: 0, position: "MID")
+               }
+           case "DEF":
+               if let index = DEF.firstIndex(where: { $0.name == player.0 }) {
+                   DEF[index] = Player(name: "Player", shirtName: "default-shirt", price: 0, position: "DEF")
+               }
+           case "GK":
+               GK = Player(name: "Player", shirtName: "default-shirt", price: 0, position: "GK")
+           default:
+               return
+           }
         teamBudget += price
     }
 
